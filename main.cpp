@@ -5,13 +5,19 @@ using namespace std;
 char* mystrtok(char *str, char space) {
     char* token;
 
-    int i = 0;
+    static int buff = 0;
+    int i = buff;
 
-    while (str[i] != space){
-        token[i] = str[i];
+    
+    do{
+        token[i - buff] = str[i];
         i++;
     }
+    while (str[i] != space);
 
+    cout << buff << '\n';
+    buff += i;
+    
     return token;
 }
 
@@ -56,8 +62,16 @@ int mystrlen(char *str) {
 int mystrcmp(char *str1, char *str2) {
 
     if(str1 == str2) return 0;
-    if(mystrlen(str1) > mystrlen(str2)) return 1;
-    if(mystrlen(str1) < mystrlen(str2)) return -1;
+
+    int i = 0;
+
+    while(str1[i] == '\0' or str2[i] == '\0'){
+
+        if(int(str1[i]) < int(str2[i])) return -1;
+        if(int(str1[i]) > int(str2[i])) return 1;
+
+        i++;
+    }
 }
 
 int mystrncmp(char* str1, char* str2, size_t n){
@@ -118,6 +132,7 @@ char* mystrstr(char* target, char* donor){
         token[i2] = donor[i + i2];
         i2++;
     }
+    token[i2 + 1] = '\0';
 
     return token;
 }
@@ -127,14 +142,15 @@ int main() {
     char test[256];
 
     cout << "start\nAll parameters in functions is (test, str, 5)\n\n";
-    cout << mystrtok(str, ' ') << " :: strtok\n";
+    cout << mystrtok(str, ' ') << " :: strtok 1\n";
+    cout << mystrtok(str, ' ') << " :: strtok 2\n";
     cout << mystrcpy(test, str) << " :: strcpy\n";
     cout << mystrncpy(test, str, 5) << " :: strncpy\n";
     cout << mystrcat(test, str) << " :: strcat\n";
     cout << mystrncat(test, str, 5) << " :: strncat\n";
     cout << mystrlen(test) << " :: strlen(test)\n";
     cout << mystrlen(str) << " :: strlen(str)\n";
-    cout << mystrcmp(test, str) << " :: strcmp\n";
+    //cout << mystrcmp(test, str) << " :: strcmp\n";
     cout << mystrncmp(test, str, 5) << " :: strncmp\n";
     cout << mystrstr("Hell", test) << " :: strstr\n";
 
